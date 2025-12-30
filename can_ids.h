@@ -1,6 +1,8 @@
 #ifndef CAN_IDS_H
 #define CAN_IDS_H
 
+#define HYDROGREEN_CAN_BAUD_RATE    500000
+
 typedef enum can_id_t {
     CAN_ID_TIME = 0x100,
     CAN_ID_TIME_BEFORE_TRANSMIT = 0x101,
@@ -53,7 +55,9 @@ typedef enum can_id_t {
     CAN_ID_PROTIUM_STATE = 0x122,
 
     CAN_ID_MAIN_VALVE_ENABLE_OUTPUT = 0x123,
-    CAN_ID_MC_ENABLE_OUTPUT = 0x124
+    CAN_ID_MC_ENABLE_OUTPUT = 0x124,
+
+    CAN_ID_BUTTONS_LIGHTS_MASK = 0x125,
 } can_id_t;
 
 #endif
