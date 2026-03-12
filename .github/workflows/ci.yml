@@ -1,0 +1,34 @@
+name: Generate C source from DBC
+
+on:
+  push:
+    paths:
+      - 'hydrogreen-can-definitions.dbc'
+  workflow_dispatch:
+
+jobs:
+  generate-c-source:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install cantools
+        run: pip install cantools
+
+      - name: Generate C source from DBC
+        run: |
+          mkdir -p src
+          python3 -m cantools generate_c_source hydrogreen-can-definitions.dbc
+
+      - name: Commit generated C files
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: regenerate C sources from DBC"
+          file_pattern: "*.c *.h"

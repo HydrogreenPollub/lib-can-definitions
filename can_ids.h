@@ -1,5 +1,7 @@
 #ifndef CAN_IDS_H
 #define CAN_IDS_H
+ 
+// TODO remove file in future
 
 #define HYDROGREEN_CAN_BAUD_RATE    500000
 
