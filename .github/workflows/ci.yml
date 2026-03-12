@@ -25,7 +25,7 @@ jobs:
       - name: Generate C source from DBC
         run: |
           mkdir -p src
-          python3 -m cantools generate_c_source hydrogreen-can-definitions.dbc
+          python3 -m cantools generate_c_source hydrogreen-can-definitions.dbc --database-name can
 
       - name: Commit generated C files
         uses: stefanzweifel/git-auto-commit-action@v5

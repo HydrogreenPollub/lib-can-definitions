@@ -45,7 +45,7 @@ BO_ 2147483904 MCU_STATE: 2 MCU
    SG_ MOTOR_CONTROLLER_ENABLED : 14|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ MAIN_VALVE_ENABLED : 15|1@1+ (1,0) [0|1] "" Vector__XXX
 
-BO_ 2147483906 MCU_INPUTS: 2 MCU
+BO_ 2147483906 MCU_INPUTS: 1 MCU
    SG_ EMERGENCY_SWITCH : 0|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ DEAD_MANS_SWITCH : 1|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ LEAKAGE_DETECTED : 2|1@1+ (1,0) [0|1] "" Vector__XXX
@@ -53,7 +53,7 @@ BO_ 2147483906 MCU_INPUTS: 2 MCU
    SG_ START_BUTTON : 4|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ RESET_BUTTON : 5|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ CALIBRATION_BUTTON : 6|1@1+ (1,0) [0|1] "" Vector__XXX
-   SG_ GAS_PEDAL : 8|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ GAS_PEDAL : 7|1@1+ (1,0) [0|1] "" Vector__XXX
 
 BO_ 2147483905 MCU_FAULTS: 8 MCU
    SG_ EMERGENCY_SWITCH : 0|1@1+ (1,0) [0|1] "" Vector__XXX
@@ -151,24 +151,14 @@ BO_ 2147484416 SWU_LIGHTS: 1 SWU
    SG_ LEFT_INDICATOR : 4|1@1+ (1,0) [0|1] "" Vector__XXX
 
 BO_ 2147484672 MCU_LIGHTING: 1 MCU
-   SG_ HEADLIGHT : 0|1@1+ (1,0) [0|1] "" LCU
-   SG_ POSITION_LIGHT : 1|1@1+ (1,0) [0|1] "" LCU
-   SG_ BRAKE_LIGHT : 2|1@1+ (1,0) [0|1] "" LCU
-   SG_ LEFT_INDICATOR : 3|1@1+ (1,0) [0|1] "" LCU
-   SG_ RIGHT_INDICATOR : 4|1@1+ (1,0) [0|1] "" LCU
-   SG_ HAZARD : 5|1@1+ (1,0) [0|1] "" LCU
+   SG_ HEADLIGHT : 0|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ POSITION_LIGHT : 1|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ BRAKE_LIGHT : 2|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ LEFT_INDICATOR : 3|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ RIGHT_INDICATOR : 4|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ HAZARD : 5|1@1+ (1,0) [0|1] "" Vector__XXX
 
-BO_ 2147484673 LCU_FRONT_STATUS: 1 LCU
-   SG_ INSTANCE : 0|1@1+ (1,0) [0|1] "" MCU
-   SG_ FAULT : 1|1@1+ (1,0) [0|1] "" MCU
-   SG_ HEADLIGHT : 2|1@1+ (1,0) [0|1] "" MCU
-   SG_ POSITION_LIGHT : 3|1@1+ (1,0) [0|1] "" MCU
-   SG_ BRAKE_LIGHT : 4|1@1+ (1,0) [0|1] "" MCU
-   SG_ LEFT_INDICATOR : 5|1@1+ (1,0) [0|1] "" MCU
-   SG_ RIGHT_INDICATOR : 6|1@1+ (1,0) [0|1] "" MCU
-   SG_ HAZARD : 7|1@1+ (1,0) [0|1] "" MCU
-
-BO_ 2147484674 LCU_BACK_STATUS: 1 LCU
+BO_ 2147484673 LCU_STATUS: 1 LCU
    SG_ INSTANCE : 0|1@1+ (1,0) [0|1] "" MCU
    SG_ FAULT : 1|1@1+ (1,0) [0|1] "" MCU
    SG_ HEADLIGHT : 2|1@1+ (1,0) [0|1] "" MCU
@@ -192,12 +182,9 @@ CM_ SG_ 2147484672 BRAKE_LIGHT "Rear red brake light(s), active when brake pedal
 CM_ SG_ 2147484672 LEFT_INDICATOR "Left turn indicator request. LCU handles blink timing. Art.50c.";
 CM_ SG_ 2147484672 RIGHT_INDICATOR "Right turn indicator request. LCU handles blink timing. Art.50b.";
 CM_ SG_ 2147484672 HAZARD "Hazard lights - overrides indicators, both sides blink. Art.50h.";
-CM_ BO_ 2147484673 "Front LCU status. Signal layout mirrors MCU_LIGHTING for direct command/status comparison. INSTANCE always 0 (FRONT).";
-CM_ BO_ 2147484674 "Rear LCU status. Signal layout mirrors MCU_LIGHTING for direct command/status comparison. INSTANCE always 1 (BACK).";
-CM_ SG_ 2147484673 INSTANCE "Physical instance flag - set by onboard switch/resistor. 0=FRONT, 1=BACK.";
-CM_ SG_ 2147484674 INSTANCE "Physical instance flag - set by onboard switch/resistor. 0=FRONT, 1=BACK.";
+CM_ BO_ 2147484673 "LCU status. Both front and back instances transmit this frame. Signal layout mirrors MCU_LIGHTING for direct comparison. INSTANCE identifies which board sent it.";
+CM_ SG_ 2147484673 INSTANCE "Physical instance flag set by onboard switch/resistor. 0=FRONT, 1=BACK.";
 CM_ SG_ 2147484673 FAULT "LED strip or communication fault detected.";
-CM_ SG_ 2147484674 FAULT "LED strip or communication fault detected.";
 
 CM_ BO_ 2147484416 "Steering wheel light button states. SWU also receives SPEED and SUPERCAPACITOR_VOLTAGE from MCU for dashboard display.";
 CM_ SG_ 2147484416 HAZARD "Hazard lights button.";
@@ -206,12 +193,12 @@ CM_ SG_ 2147484416 POSITION "Position lights button.";
 CM_ SG_ 2147484416 RIGHT_INDICATOR "Right turn indicator button.";
 CM_ SG_ 2147484416 LEFT_INDICATOR "Left turn indicator button.";
 
-CM_ SG_ 2147483906 GAS_PEDAL "Digital input din0 - gas pedal pressed signal.";
+CM_ SG_ 2147483906 GAS_PEDAL "Digital state of the acceleration pedal (AI6/din0) - active when pedal voltage exceeds threshold.";
 
-CM_ SG_ 2147483912 AI1 "Unassigned analog input 1. Purpose TBD.";
-CM_ SG_ 2147483912 AI3 "Unassigned analog input 3. Purpose TBD.";
-CM_ SG_ 2147483912 AI4 "Unassigned analog input 4. Purpose TBD.";
-CM_ SG_ 2147483912 AI5 "Unassigned analog input 5. Purpose TBD.";
+CM_ SG_ 2147483912 AI1 "Unassigned analog input AI1 (J3 pin not listed in hardware doc). Purpose TBD.";
+CM_ SG_ 2147483912 AI3 "Unassigned analog input AI3 (J3 pin not listed in hardware doc). Purpose TBD.";
+CM_ SG_ 2147483912 AI4 "Unassigned analog input AI4 (J3 pin not listed in hardware doc). Purpose TBD.";
+CM_ SG_ 2147483912 AI5 "Unassigned analog input AI5 (J3 pin not listed in hardware doc). Purpose TBD.";
 
 CM_ BO_ 2147484160 "Spectronic Protium data forwarded by MCU via RS485. Scheduled for removal when FCCU replaces Protium.";
 CM_ SG_ 2147484161 FAN "Cooling fan duty cycle.";
@@ -278,12 +265,4 @@ VAL_ 2147484673 BRAKE_LIGHT 0 "OFF" 1 "ON";
 VAL_ 2147484673 LEFT_INDICATOR 0 "OFF" 1 "BLINKING";
 VAL_ 2147484673 RIGHT_INDICATOR 0 "OFF" 1 "BLINKING";
 VAL_ 2147484673 HAZARD 0 "OFF" 1 "BLINKING";
-VAL_ 2147484674 INSTANCE 0 "FRONT" 1 "BACK";
-VAL_ 2147484674 FAULT 0 "OK" 1 "FAULT";
-VAL_ 2147484674 HEADLIGHT 0 "OFF" 1 "ON";
-VAL_ 2147484674 POSITION_LIGHT 0 "OFF" 1 "ON";
-VAL_ 2147484674 BRAKE_LIGHT 0 "OFF" 1 "ON";
-VAL_ 2147484674 LEFT_INDICATOR 0 "OFF" 1 "BLINKING";
-VAL_ 2147484674 RIGHT_INDICATOR 0 "OFF" 1 "BLINKING";
-VAL_ 2147484674 HAZARD 0 "OFF" 1 "BLINKING";
 VAL_ 2147484166 OPERATING_STATE 0 "DISCONNECTED" 1 "SYSTEM_OFF" 2 "FIRMWARE_VERSION" 3 "COMMAND_NOT_FOUND" 4 "ENTERING_STARTING" 5 "ENTERING_RUNNING" 6 "ANODE_SUPPLY_PRESSURE_CHECK" 7 "TEMPERATURE_CHECK" 8 "FC_GAS_SYSTEM_CHECK" 9 "FC_SEALING_CHECK" 10 "FC_VOLTAGE_CHECK" 11 "LOW_H2_SUPPLY" 12 "SHUTDOWN_INITIATED" 13 "ABNORMAL_SHUTDOWN_INITIATED" 14 "RUNNING";
