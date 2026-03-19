@@ -32,7 +32,10 @@ NS_ :
     SG_MUL_VAL_
 
 BS_:
-BU_: MCU SWU LCU FCCU TCU EDU
+BU_: MCU SWU LCU FCCU TCU EDU CCU
+
+BO_ 2147483919 CCU_STATUS: 1 CCU
+   SG_ STATUS : 0|4@1+ (1,0) [0|4] "" Vector__XXX
 
 BO_ 2147483920 MCU_TIME_SYNC: 8 MCU
    SG_ TIME_MS : 0|32@1+ (1,0) [0|4294967295] "ms" Vector__XXX
@@ -168,6 +171,7 @@ BO_ 2147484673 LCU_STATUS: 1 LCU
    SG_ RIGHT_INDICATOR : 6|1@1+ (1,0) [0|1] "" MCU
    SG_ HAZARD : 7|1@1+ (1,0) [0|1] "" MCU
 
+CM_ BU_ CCU "CAN converter unit — bridges RS485 master data to CAN. Manages status LED and DFU.";
 CM_ BU_ MCU "Master control unit (via CAN converter unit)";
 CM_ BU_ SWU "Steering wheel unit";
 CM_ BU_ LCU "Lighting control unit. Two identical boards (front/back) distinguished at runtime by a physical instance flag (switch or resistor).";
@@ -265,5 +269,10 @@ VAL_ 2147484673 BRAKE_LIGHT 0 "OFF" 1 "ON";
 VAL_ 2147484673 LEFT_INDICATOR 0 "OFF" 1 "BLINKING";
 VAL_ 2147484673 RIGHT_INDICATOR 0 "OFF" 1 "BLINKING";
 VAL_ 2147484673 HAZARD 0 "OFF" 1 "BLINKING";
+CM_ BO_ 2147483919 "CCU node status. CiA 303-3 inspired LED pattern broadcast every 1 s. STATUS values map directly to the onboard status LED pattern.";
+CM_ SG_ 2147483919 STATUS "Node status. 0=INIT (blinking), 1=OPERATIONAL (single flash), 2=WARNING (double flash), 3=BUS_OFF (steady on), 4=DFU (triple flash).";
+
+VAL_ 2147483919 STATUS 0 "INIT" 1 "OPERATIONAL" 2 "WARNING" 3 "BUS_OFF" 4 "DFU";
+
 VAL_ 2147484166 OPERATING_STATE 0 "DISCONNECTED" 1 "SYSTEM_OFF" 2 "FIRMWARE_VERSION" 3 "COMMAND_NOT_FOUND" 4 "ENTERING_STARTING" 5 "ENTERING_RUNNING" 6 "ANODE_SUPPLY_PRESSURE_CHECK" 7 "TEMPERATURE_CHECK" 8 "FC_GAS_SYSTEM_CHECK" 9 "FC_SEALING_CHECK" 10 "FC_VOLTAGE_CHECK" 11 "LOW_H2_SUPPLY" 12 "SHUTDOWN_INITIATED" 13 "ABNORMAL_SHUTDOWN_INITIATED" 14 "RUNNING";
 
