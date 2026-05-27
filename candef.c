@@ -3393,6 +3393,8 @@ int candef_fccu_hydrogen_pack(
     dst_p[3] |= pack_right_shift_u16(src_p->hp_pressure, 8u, 0xffu);
     dst_p[4] |= pack_left_shift_u16(src_p->leakage_voltage, 0u, 0xffu);
     dst_p[5] |= pack_right_shift_u16(src_p->leakage_voltage, 8u, 0xffu);
+    dst_p[6] |= pack_left_shift_u16(src_p->flow_rate, 0u, 0xffu);
+    dst_p[7] |= pack_right_shift_u16(src_p->flow_rate, 8u, 0xffu);
 
     return (8);
 }
@@ -3412,6 +3414,8 @@ int candef_fccu_hydrogen_unpack(
     dst_p->hp_pressure |= unpack_left_shift_u16(src_p[3], 8u, 0xffu);
     dst_p->leakage_voltage = unpack_right_shift_u16(src_p[4], 0u, 0xffu);
     dst_p->leakage_voltage |= unpack_left_shift_u16(src_p[5], 8u, 0xffu);
+    dst_p->flow_rate = unpack_right_shift_u16(src_p[6], 0u, 0xffu);
+    dst_p->flow_rate |= unpack_left_shift_u16(src_p[7], 8u, 0xffu);
 
     return (0);
 }
@@ -3485,6 +3489,27 @@ bool candef_fccu_hydrogen_leakage_voltage_is_in_range(uint16_t value)
 bool candef_fccu_hydrogen_leakage_voltage_is_in_phys_range(double value)
 {
     return ((value >= 0.0) && (value <= 5.0));
+}
+
+uint16_t candef_fccu_hydrogen_flow_rate_encode(double value)
+{
+    return (uint16_t)(value / 0.001);
+}
+
+double candef_fccu_hydrogen_flow_rate_decode(uint16_t value)
+{
+    return ((double)value * 0.001);
+}
+
+bool candef_fccu_hydrogen_flow_rate_is_in_range(uint16_t value)
+{
+    (void)value;
+    return (true);
+}
+
+bool candef_fccu_hydrogen_flow_rate_is_in_phys_range(double value)
+{
+    return ((value >= 0.0) && (value <= 65.535));
 }
 
 int candef_fccu_thermal_pack(

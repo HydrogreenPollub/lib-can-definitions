@@ -67,10 +67,11 @@ extern "C" {
 #define CANDEF_MCU_LIGHTING_FRAME_ID (0x400u)
 #define CANDEF_LCU_STATUS_FRAME_ID (0x401u)
 #define CANDEF_FCCU_STATE_FRAME_ID (0x500u)
-#define CANDEF_FCCU_POWER_FRAME_ID (0x501u)
-#define CANDEF_FCCU_HYDROGEN_FRAME_ID (0x502u)
+#define CANDEF_FCCU_HYDROGEN_FRAME_ID (0x501u)
+#define CANDEF_FCCU_POWER_FRAME_ID (0x502u)
 #define CANDEF_FCCU_THERMAL_FRAME_ID (0x503u)
 #define CANDEF_FCCU_CURRENTS_FRAME_ID (0x504u)
+#define CANDEF_FCCU_FLOW_FRAME_ID (0x505u)
 
 /* Frame lengths in bytes. */
 #define CANDEF_CCU_STATUS_LENGTH (1u)
@@ -99,6 +100,7 @@ extern "C" {
 #define CANDEF_FCCU_HYDROGEN_LENGTH (8u)
 #define CANDEF_FCCU_THERMAL_LENGTH (8u)
 #define CANDEF_FCCU_CURRENTS_LENGTH (8u)
+#define CANDEF_FCCU_FLOW_LENGTH (8u)
 
 /* Extended or standard frame types. */
 #define CANDEF_CCU_STATUS_IS_EXTENDED (1)
@@ -127,6 +129,7 @@ extern "C" {
 #define CANDEF_FCCU_HYDROGEN_IS_EXTENDED (1)
 #define CANDEF_FCCU_THERMAL_IS_EXTENDED (1)
 #define CANDEF_FCCU_CURRENTS_IS_EXTENDED (1)
+#define CANDEF_FCCU_FLOW_IS_EXTENDED (1)
 
 /* Frame cycle times in milliseconds. */
 
@@ -352,6 +355,7 @@ extern "C" {
 #define CANDEF_FCCU_HYDROGEN_NAME "FCCU_HYDROGEN"
 #define CANDEF_FCCU_THERMAL_NAME "FCCU_THERMAL"
 #define CANDEF_FCCU_CURRENTS_NAME "FCCU_CURRENTS"
+#define CANDEF_FCCU_FLOW_NAME "FCCU_FLOW"
 
 /* Signal Names. */
 #define CANDEF_CCU_STATUS_STATUS_NAME "STATUS"
@@ -1428,7 +1432,8 @@ struct candef_fccu_power_t {
 /**
  * Signals in message FCCU_HYDROGEN.
  *
- * FCCU hydrogen system: low/high pressure sensors and leakage detector.
+ * FCCU hydrogen system: low/high pressure sensors, leakage detector,
+ * and Vögtlin flowmeter rate.
  *
  * All signal values are as on the CAN bus.
  */
@@ -1453,6 +1458,13 @@ struct candef_fccu_hydrogen_t {
      * Offset: 0
      */
     uint16_t leakage_voltage;
+
+    /**
+     * Range: 0..65535 (0..65.535 Ln/min)
+     * Scale: 0.001
+     * Offset: 0
+     */
+    uint16_t flow_rate;
 };
 
 /**
@@ -6696,6 +6708,34 @@ bool candef_fccu_hydrogen_leakage_voltage_is_in_range(uint16_t value);
  * @return true if in range, false otherwise.
  */
 bool candef_fccu_hydrogen_leakage_voltage_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @return Encoded signal.
+ */
+uint16_t candef_fccu_hydrogen_flow_rate_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @return Decoded signal.
+ */
+double candef_fccu_hydrogen_flow_rate_decode(uint16_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool candef_fccu_hydrogen_flow_rate_is_in_range(uint16_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool candef_fccu_hydrogen_flow_rate_is_in_phys_range(double value);
 
 /**
  * Pack message FCCU_THERMAL.

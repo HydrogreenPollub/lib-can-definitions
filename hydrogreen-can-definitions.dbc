@@ -284,17 +284,17 @@ BO_ 2147484928 FCCU_STATE: 2 FCCU
  SG_ FAN_ON : 6|1@1+ (1,0) [0|1] "" Vector__XXX
  SG_ FAN_DUTY_PCT : 8|8@1+ (1,0) [0|100] "%" Vector__XXX
 
-BO_ 2147484929 FCCU_POWER: 8 FCCU
- SG_ FC_VOLTAGE : 0|16@1+ (0.001,0) [0|60] "V" Vector__XXX
- SG_ SC_VOLTAGE : 16|16@1+ (0.001,0) [0|60] "V" Vector__XXX
- SG_ FC_CURRENT : 32|16@1+ (0.001,0) [0|40] "A" Vector__XXX
- SG_ FC_TEMP_C : 48|16@1- (0.1,0) [-50|200] "degC" Vector__XXX
-
-BO_ 2147484930 FCCU_HYDROGEN: 8 FCCU
+BO_ 2147484929 FCCU_HYDROGEN: 8 FCCU
  SG_ LP_PRESSURE : 0|16@1+ (0.001,0) [0|10] "bar" Vector__XXX
  SG_ HP_PRESSURE : 16|16@1+ (0.001,0) [0|700] "bar" Vector__XXX
  SG_ LEAKAGE_VOLTAGE : 32|16@1+ (0.0001,0) [0|5] "V" Vector__XXX
  SG_ FLOW_RATE : 48|16@1+ (0.001,0) [0|65.535] "Ln/min" Vector__XXX
+
+BO_ 2147484930 FCCU_POWER: 8 FCCU
+ SG_ FC_VOLTAGE : 0|16@1+ (0.001,0) [0|60] "V" Vector__XXX
+ SG_ SC_VOLTAGE : 16|16@1+ (0.001,0) [0|60] "V" Vector__XXX
+ SG_ FC_CURRENT : 32|16@1+ (0.001,0) [0|40] "A" Vector__XXX
+ SG_ FC_TEMP_C : 48|16@1- (0.1,0) [-50|200] "degC" Vector__XXX
 
 BO_ 2147484931 FCCU_THERMAL: 8 FCCU
  SG_ BME76_TEMP : 0|16@1- (0.1,0) [-50|150] "degC" Vector__XXX
@@ -308,11 +308,16 @@ BO_ 2147484932 FCCU_CURRENTS: 8 FCCU
  SG_ HO_CURRENT_2 : 32|16@1- (0.001,0) [-40|40] "A" Vector__XXX
  SG_ HO_CURRENT_3 : 48|16@1- (0.001,0) [-40|40] "A" Vector__XXX
 
-CM_ BO_ 2147484928 "FCCU operating state and actuator status.";
-CM_ BO_ 2147484929 "FCCU power measurements: fuel cell voltage/current and temperature.";
-CM_ BO_ 2147484930 "FCCU hydrogen system: low/high pressure sensors, leakage detector, and Vögtlin flowmeter rate.";
-CM_ BO_ 2147484931 "FCCU ambient sensors: dual BME280 temperature and humidity.";
-CM_ BO_ 2147484932 "FCCU HO-10P hall-effect current sensor channels 0-3.";
+BO_ 2147484933 FCCU_FLOW: 8 FCCU
+ SG_ RATE_MLN_MIN : 0|32@1+ (0.001,0) [0|4294967.295] "Ln/min" Vector__XXX
+ SG_ TOTAL_MLN : 32|32@1+ (0.001,0) [0|4294967.295] "Ln" Vector__XXX
+
+CM_ BO_ 2147484928 "FCCU state and actuator flags.";
+CM_ BO_ 2147484929 "Hydrogen pressures, leakage, flow.";
+CM_ BO_ 2147484930 "Fuel cell power measurements.";
+CM_ BO_ 2147484931 "Dual BME280 thermal readings.";
+CM_ BO_ 2147484932 "HO-10P current sensor channels.";
+CM_ BO_ 2147484933 "Flowmeter rate and total.";
 
 VAL_ 2147484928 RUNNING_STATE 0 "RUNNING" 1 "STOPPED" 2 "IDLE";
 VAL_ 2147484928 MAIN_VALVE 0 "CLOSED" 1 "OPEN";
