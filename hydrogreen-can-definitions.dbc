@@ -326,31 +326,30 @@ VAL_ 2147483919 STATUS 0 "INIT" 1 "OPERATIONAL" 2 "WARNING" 3 "BUS_OFF" 4 "DFU";
 VAL_ 2147484166 OPERATING_STATE 0 "DISCONNECTED" 1 "SYSTEM_OFF" 2 "FIRMWARE_VERSION" 3 "COMMAND_NOT_FOUND" 4 "ENTERING_STARTING" 5 "ENTERING_RUNNING" 6 "ANODE_SUPPLY_PRESSURE_CHECK" 7 "TEMPERATURE_CHECK" 8 "FC_GAS_SYSTEM_CHECK" 9 "FC_SEALING_CHECK" 10 "FC_VOLTAGE_CHECK" 11 "LOW_H2_SUPPLY" 12 "SHUTDOWN_INITIATED" 13 "ABNORMAL_SHUTDOWN_INITIATED" 14 "RUNNING";
 
 
-BO_ 2147484928 FCCU_STATE: 6 FCCU
- SG_ RUNNING_STATE : 0|4@1+ (1,0) [0|7] "" Vector__XXX
+BO_ 2147484928 FCCU_STATE: 4 FCCU
+ SG_ STATE : 0|4@1+ (1,0) [0|7] "" Vector__XXX
  SG_ MAIN_VALVE : 4|1@1+ (1,0) [0|1] "" Vector__XXX
  SG_ PURGE_MODE : 5|2@1+ (1,0) [0|3] "" Vector__XXX
  SG_ FAN_MODE : 7|1@1+ (1,0) [0|1] "" Vector__XXX
  SG_ FAN_DUTY : 8|8@1+ (1,0) [0|100] "%" Vector__XXX
- SG_ FC_TEMP_C : 16|16@1- (0.1,0) [-50|200] "degC" Vector__XXX
- SG_ H2_FLOW : 32|16@1+ (0.001,0) [0|65.535] "Ln/min" Vector__XXX
+ SG_ PURGE_INTERVAL_S : 16|16@1+ (1,0) [0|65535] "s" Vector__XXX
 
 BO_ 2147484929 FCCU_HYDROGEN: 8 FCCU
- SG_ LP_PRESSURE : 0|16@1+ (0.001,0) [0|10] "bar" Vector__XXX
- SG_ HP_PRESSURE : 16|16@1+ (0.001,0) [0|700] "bar" Vector__XXX
- SG_ LEAKAGE_VOLTAGE : 32|16@1+ (0.0001,0) [0|5] "V" Vector__XXX
- SG_ FLOW_RATE : 48|16@1+ (0.001,0) [0|65.535] "Ln/min" Vector__XXX
+ SG_ H2_FLOW : 0|16@1+ (0.001,0) [0|65.535] "Ln/min" Vector__XXX
+ SG_ H2_LP_PRESSURE : 16|16@1+ (0.001,0) [0|10] "bar" Vector__XXX
+ SG_ H2_HP_PRESSURE : 32|16@1+ (0.001,0) [0|600] "bar" Vector__XXX
+ SG_ LEAKAGE_VOLTAGE : 48|16@1+ (0.0001,0) [0|5] "V" Vector__XXX
 
 BO_ 2147484930 FCCU_POWER: 6 FCCU
  SG_ FC_VOLTAGE : 0|16@1+ (0.001,0) [0|60] "V" Vector__XXX
- SG_ SC_VOLTAGE : 16|16@1+ (0.001,0) [0|60] "V" Vector__XXX
- SG_ FC_CURRENT : 32|16@1+ (0.001,0) [0|40] "A" Vector__XXX
+ SG_ FC_CURRENT : 16|16@1+ (0.001,0) [0|40] "A" Vector__XXX
+ SG_ ACCESSORY_VOLTAGE : 32|16@1+ (0.001,0) [0|20] "V" Vector__XXX
 
-BO_ 2147484931 FCCU_THERMAL: 8 FCCU
- SG_ BME76_TEMP : 0|16@1- (0.1,0) [-50|150] "degC" Vector__XXX
- SG_ BME76_HUMIDITY : 16|16@1+ (0.1,0) [0|100] "%" Vector__XXX
- SG_ BME77_TEMP : 32|16@1- (0.1,0) [-50|150] "degC" Vector__XXX
- SG_ BME77_HUMIDITY : 48|16@1+ (0.1,0) [0|100] "%" Vector__XXX
+BO_ 2147484931 FCCU_ENVIRONMENT: 8 FCCU
+ SG_ FC_TEMP_C : 0|16@1- (0.1,0) [-50|200] "degC" Vector__XXX
+ SG_ AMBIENT_TEMP_C : 16|16@1- (0.1,0) [-50|150] "degC" Vector__XXX
+ SG_ AMBIENT_HUMIDITY : 32|16@1+ (0.1,0) [0|100] "%" Vector__XXX
+ SG_ AMBIENT_PRESSURE : 48|16@1+ (0.1,0) [0|1200] "hPa" Vector__XXX
 
 BO_ 2147484932 FCCU_CURRENTS: 8 FCCU
  SG_ HO_CURRENT_0 : 0|16@1- (0.001,0) [-40|40] "A" Vector__XXX
@@ -358,18 +357,13 @@ BO_ 2147484932 FCCU_CURRENTS: 8 FCCU
  SG_ HO_CURRENT_2 : 32|16@1- (0.001,0) [-40|40] "A" Vector__XXX
  SG_ HO_CURRENT_3 : 48|16@1- (0.001,0) [-40|40] "A" Vector__XXX
 
-BO_ 2147484933 FCCU_FLOW: 8 FCCU
- SG_ RATE_MLN_MIN : 0|32@1+ (0.001,0) [0|4294967.295] "Ln/min" Vector__XXX
- SG_ TOTAL_MLN : 32|32@1+ (0.001,0) [0|4294967.295] "Ln" Vector__XXX
-
-CM_ BO_ 2147484928 "FCCU operating state, modes, FC temperature, and H2 flow.";
-CM_ BO_ 2147484929 "Hydrogen pressures, leakage, flow.";
-CM_ BO_ 2147484930 "Fuel cell voltage, supercap voltage, and current.";
-CM_ BO_ 2147484931 "Dual BME280 thermal readings.";
+CM_ BO_ 2147484928 "FCCU operating state, modes, fan duty, and purge interval.";
+CM_ BO_ 2147484929 "Hydrogen flow, pressures, and leakage.";
+CM_ BO_ 2147484930 "Fuel cell voltage, fuel cell current, and accessory voltage.";
+CM_ BO_ 2147484931 "Fuel cell and ambient environmental readings.";
 CM_ BO_ 2147484932 "HO-10P current sensor channels.";
-CM_ BO_ 2147484933 "Flowmeter rate and total.";
 
-VAL_ 2147484928 RUNNING_STATE 0 "RUNNING" 1 "STOPPED" 2 "IDLE";
+VAL_ 2147484928 STATE 0 "RUNNING" 1 "STOPPED" 2 "IDLE";
 VAL_ 2147484928 MAIN_VALVE 0 "CLOSED" 1 "OPEN";
 VAL_ 2147484928 PURGE_MODE 0 "THRESHOLD" 1 "PERIODIC" 2 "MANUAL";
 VAL_ 2147484928 FAN_MODE 0 "MANUAL" 1 "AUTO";
