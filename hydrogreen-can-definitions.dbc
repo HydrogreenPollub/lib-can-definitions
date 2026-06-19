@@ -103,6 +103,10 @@ BO_ 2147483911 MCU_ANALOG_DRIVE: 4 MCU
    SG_ RPM : 0|16@1+ (1,0) [0|65535] "rpm" Vector__XXX
    SG_ SPEED : 16|16@1+ (0.01,0) [0|655] "km/h" SWU
 
+BO_ 2147483913 MCU_ANALOG_OUTPUTS: 4 MCU
+   SG_ ACCELERATION_OUTPUT_VOLTAGE : 0|16@1+ (0.0001,0) [0|5] "V" Vector__XXX
+   SG_ BRAKE_OUTPUT_VOLTAGE : 16|16@1+ (0.0001,0) [0|5] "V" Vector__XXX
+
 BO_ 2147483912 MCU_ANALOG_UNASSIGNED: 8 MCU
    SG_ AI1 : 0|16@1+ (0.001,0) [0|65] "V" Vector__XXX
    SG_ AI3 : 16|16@1+ (0.001,0) [0|65] "V" Vector__XXX
@@ -235,6 +239,10 @@ CM_ SG_ 2147484419 ERROR_MASK "Sticky SWU fault bitmask.";
 CM_ SG_ 2147484419 HEARTBEAT "Rolling SWU heartbeat counter.";
 
 CM_ SG_ 2147483906 SPEED_SENSOR_PULSE_RAW "Raw speed sensor pulse input (currently expected false in SCADE input mapping).";
+
+CM_ BO_ 2147483913 "MCU SCADE acceleration and recuperation output voltages.";
+CM_ SG_ 2147483913 ACCELERATION_OUTPUT_VOLTAGE "SCADE acceleration output voltage.";
+CM_ SG_ 2147483913 BRAKE_OUTPUT_VOLTAGE "SCADE recuperation/brake output voltage.";
 
 CM_ SG_ 2147483912 AI1 "Unassigned analog input AI1 (J3 pin not listed in hardware doc). Purpose TBD.";
 CM_ SG_ 2147483912 AI3 "Unassigned analog input AI3 (J3 pin not listed in hardware doc). Purpose TBD.";
