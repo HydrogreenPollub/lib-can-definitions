@@ -150,19 +150,14 @@ BO_ 2147484165 PROTIUM_MISC: 4 MCU
 BO_ 2147484166 PROTIUM_STATE: 1 MCU
    SG_ OPERATING_STATE : 0|8@1+ (1,0) [0|255] "" Vector__XXX
 
-BO_ 2147484416 SWU_LIGHTS: 1 SWU
-   SG_ HAZARD : 0|1@1+ (1,0) [0|1] "" Vector__XXX
-   SG_ BEAM : 1|1@1+ (1,0) [0|1] "" Vector__XXX
-   SG_ POSITION : 2|1@1+ (1,0) [0|1] "" Vector__XXX
-   SG_ RIGHT_INDICATOR : 3|1@1+ (1,0) [0|1] "" Vector__XXX
-   SG_ LEFT_INDICATOR : 4|1@1+ (1,0) [0|1] "" Vector__XXX
+BO_ 2147484416 SWU_STATUS: 8 SWU
+   SG_ CAN_STATE : 0|8@1+ (1,0) [0|255] "" Vector__XXX
+   SG_ LAP_NUMBER : 8|8@1+ (1,0) [0|255] "" Vector__XXX
+   SG_ LAP_TIME_MS : 16|24@1+ (1,0) [0|16777215] "ms" Vector__XXX
+   SG_ TOTAL_TIME_MS : 40|24@1+ (1,0) [0|16777215] "ms" Vector__XXX
 
-BO_ 2147484417 SWU_TIME: 8 SWU
-   SG_ TOTAL_TIME_MS : 0|32@1+ (1,0) [0|4294967295] "ms" Vector__XXX
-   SG_ LAP_TIME_MS : 32|32@1+ (1,0) [0|4294967295] "ms" Vector__XXX
-
-BO_ 2147484419 SWU_STATE: 8 SWU
-   SG_ GAS_BUTTON : 0|1@1+ (1,0) [0|1] "" Vector__XXX
+BO_ 2147484417 SWU_MCU_INPUTS: 1 SWU
+   SG_ SPEED_SENSOR_PULSE_RAW : 0|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ START_BUTTON : 1|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ DEAD_MANS_SWITCH : 2|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ EMERGENCY_SWITCH : 3|1@1+ (1,0) [0|1] "" Vector__XXX
@@ -170,12 +165,13 @@ BO_ 2147484419 SWU_STATE: 8 SWU
    SG_ CALIBRATION_BUTTON : 5|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ LEAKAGE_DETECTED : 6|1@1+ (1,0) [0|1] "" Vector__XXX
    SG_ SHELL_RELAY : 7|1@1+ (1,0) [0|1] "" Vector__XXX
-   SG_ FLAGS : 8|8@1+ (1,0) [0|255] "" Vector__XXX
-   SG_ LAP_NUMBER : 16|16@1+ (1,0) [0|65535] "" Vector__XXX
-   SG_ ERROR_MASK : 32|16@1+ (1,0) [0|65535] "" Vector__XXX
-   SG_ HEARTBEAT : 48|8@1+ (1,0) [0|255] "" Vector__XXX
-   SG_ RUNTIME_STATE : 56|4@1+ (1,0) [0|15] "" Vector__XXX
-   SG_ RESERVED : 60|4@1+ (1,0) [0|15] "" Vector__XXX
+
+BO_ 2147484418 SWU_LCU_INPUTS: 1 SWU
+   SG_ HAZARD : 0|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ BEAM : 1|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ POSITION : 2|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ RIGHT_INDICATOR : 3|1@1+ (1,0) [0|1] "" Vector__XXX
+   SG_ LEFT_INDICATOR : 4|1@1+ (1,0) [0|1] "" Vector__XXX
 
 BO_ 2147484672 MCU_LIGHTING: 1 MCU
    SG_ HEADLIGHT : 0|1@1+ (1,0) [0|1] "" Vector__XXX
@@ -203,7 +199,7 @@ CM_ BU_ FCCU "Fuel cell control unit - will replace Spectronic Protium in future
 CM_ BU_ TCU "Telemetry control unit";
 CM_ BU_ EDU "Electric drive unit";
 
-CM_ BO_ 2147484672 "MCU authoritative lighting state, broadcast to both LCU instances. MCU derives state from SWU_LIGHTS and brake pedal. LCU handles blink timing locally. Compliant with Article 50.";
+CM_ BO_ 2147484672 "MCU authoritative lighting state, broadcast to both LCU instances. MCU derives state from SWU_LCU_INPUTS and brake pedal. LCU handles blink timing locally. Compliant with Article 50.";
 CM_ SG_ 2147484672 HEADLIGHT "Front headlight(s). Art.50a.";
 CM_ SG_ 2147484672 POSITION_LIGHT "Front and rear position/running lights. Art.50e.";
 CM_ SG_ 2147484672 BRAKE_LIGHT "Rear red brake light(s), active when brake pedal pressed. Art.50d.";
@@ -214,29 +210,26 @@ CM_ BO_ 2147484673 "LCU status. Both front and back instances transmit this fram
 CM_ SG_ 2147484673 INSTANCE "Physical instance flag set by onboard switch/resistor. 0=FRONT, 1=BACK.";
 CM_ SG_ 2147484673 FAULT "LED strip or communication fault detected.";
 
-CM_ BO_ 2147484416 "Steering wheel light button states. SWU also receives SPEED and SUPERCAPACITOR_VOLTAGE from MCU for dashboard display.";
-CM_ SG_ 2147484416 HAZARD "Hazard lights button.";
-CM_ SG_ 2147484416 BEAM "High beam button.";
-CM_ SG_ 2147484416 POSITION "Position lights button.";
-CM_ SG_ 2147484416 RIGHT_INDICATOR "Right turn indicator button.";
-CM_ SG_ 2147484416 LEFT_INDICATOR "Left turn indicator button.";
-CM_ BO_ 2147484417 "SWU timing telemetry frame.";
-CM_ SG_ 2147484417 TOTAL_TIME_MS "Total race/session timer in milliseconds.";
-CM_ SG_ 2147484417 LAP_TIME_MS "Current lap timer in milliseconds.";
-CM_ BO_ 2147484419 "SWU authoritative input states, runtime state, lap index, and error/status fields.";
-CM_ SG_ 2147484419 GAS_BUTTON "Gas button state from SWU.";
-CM_ SG_ 2147484419 START_BUTTON "Start button state.";
-CM_ SG_ 2147484419 DEAD_MANS_SWITCH "Dead man's switch state.";
-CM_ SG_ 2147484419 EMERGENCY_SWITCH "Emergency switch state.";
-CM_ SG_ 2147484419 RESET_BUTTON "Reset button state.";
-CM_ SG_ 2147484419 CALIBRATION_BUTTON "Calibration button state.";
-CM_ SG_ 2147484419 LEAKAGE_DETECTED "Leakage sensor switch state (currently forced in SCADE mapping).";
-CM_ SG_ 2147484419 SHELL_RELAY "Shell telemetry emergency relay input.";
-CM_ SG_ 2147484419 RUNTIME_STATE "High-level SWU runtime state.";
-CM_ SG_ 2147484419 FLAGS "Bit flags for SWU runtime status.";
-CM_ SG_ 2147484419 LAP_NUMBER "Current lap number.";
-CM_ SG_ 2147484419 ERROR_MASK "Sticky SWU fault bitmask.";
-CM_ SG_ 2147484419 HEARTBEAT "Rolling SWU heartbeat counter.";
+CM_ BO_ 2147484416 "SWU cyclic status frame with CAN controller state and timing telemetry.";
+CM_ SG_ 2147484416 CAN_STATE "Zephyr CAN controller state. 0=ERROR_ACTIVE, 1=ERROR_WARNING, 2=ERROR_PASSIVE, 3=BUS_OFF, 4=STOPPED.";
+CM_ SG_ 2147484416 LAP_NUMBER "Current lap number, saturated to 255.";
+CM_ SG_ 2147484416 LAP_TIME_MS "Current lap timer in milliseconds, saturated to 24 bits.";
+CM_ SG_ 2147484416 TOTAL_TIME_MS "Total race/session timer in milliseconds, saturated to 24 bits.";
+CM_ BO_ 2147484417 "SWU steering-wheel inputs mirrored with the MCU_INPUTS bit layout for consumers that use master-style controls.";
+CM_ SG_ 2147484417 SPEED_SENSOR_PULSE_RAW "Raw speed sensor pulse input. Currently unused by SWU.";
+CM_ SG_ 2147484417 START_BUTTON "Start button state.";
+CM_ SG_ 2147484417 DEAD_MANS_SWITCH "Dead man's switch state.";
+CM_ SG_ 2147484417 EMERGENCY_SWITCH "Emergency switch state.";
+CM_ SG_ 2147484417 RESET_BUTTON "Reset button state.";
+CM_ SG_ 2147484417 CALIBRATION_BUTTON "Calibration button state.";
+CM_ SG_ 2147484417 LEAKAGE_DETECTED "Leakage sensor switch state.";
+CM_ SG_ 2147484417 SHELL_RELAY "Shell telemetry emergency relay input.";
+CM_ BO_ 2147484418 "SWU lighting-control button inputs for LCU/lighting consumers.";
+CM_ SG_ 2147484418 HAZARD "Hazard lights button.";
+CM_ SG_ 2147484418 BEAM "High beam button.";
+CM_ SG_ 2147484418 POSITION "Position lights button.";
+CM_ SG_ 2147484418 RIGHT_INDICATOR "Right turn indicator button.";
+CM_ SG_ 2147484418 LEFT_INDICATOR "Left turn indicator button.";
 
 CM_ SG_ 2147483906 SPEED_SENSOR_PULSE_RAW "Raw speed sensor pulse input (currently expected false in SCADE input mapping).";
 
@@ -295,20 +288,20 @@ VAL_ 2147483905 ERROR_AB_V_LOW 0 "FALSE" 1 "TRUE";
 VAL_ 2147483905 ERROR_AB_V_HIGH 0 "FALSE" 1 "TRUE";
 VAL_ 2147483905 ERROR_AB_C_LOW 0 "FALSE" 1 "TRUE";
 VAL_ 2147483905 ERROR_AB_C_HIGH 0 "FALSE" 1 "TRUE";
-VAL_ 2147484416 HAZARD 0 "OFF" 1 "ON";
-VAL_ 2147484416 BEAM 0 "OFF" 1 "ON";
-VAL_ 2147484416 POSITION 0 "OFF" 1 "ON";
-VAL_ 2147484416 RIGHT_INDICATOR 0 "OFF" 1 "ON";
-VAL_ 2147484416 LEFT_INDICATOR 0 "OFF" 1 "ON";
-VAL_ 2147484419 GAS_BUTTON 0 "RELEASED" 1 "PRESSED";
-VAL_ 2147484419 START_BUTTON 0 "RELEASED" 1 "PRESSED";
-VAL_ 2147484419 DEAD_MANS_SWITCH 0 "OFF" 1 "ON";
-VAL_ 2147484419 EMERGENCY_SWITCH 0 "OFF" 1 "ON";
-VAL_ 2147484419 RESET_BUTTON 0 "RELEASED" 1 "PRESSED";
-VAL_ 2147484419 CALIBRATION_BUTTON 0 "RELEASED" 1 "PRESSED";
-VAL_ 2147484419 LEAKAGE_DETECTED 0 "FALSE" 1 "TRUE";
-VAL_ 2147484419 SHELL_RELAY 0 "OFF" 1 "ON";
-VAL_ 2147484419 RUNTIME_STATE 0 "INIT" 1 "READY" 2 "RUNNING" 3 "FAULT" 4 "DFU";
+VAL_ 2147484416 CAN_STATE 0 "ERROR_ACTIVE" 1 "ERROR_WARNING" 2 "ERROR_PASSIVE" 3 "BUS_OFF" 4 "STOPPED";
+VAL_ 2147484417 SPEED_SENSOR_PULSE_RAW 0 "LOW" 1 "HIGH";
+VAL_ 2147484417 START_BUTTON 0 "RELEASED" 1 "PRESSED";
+VAL_ 2147484417 DEAD_MANS_SWITCH 0 "OFF" 1 "ON";
+VAL_ 2147484417 EMERGENCY_SWITCH 0 "OFF" 1 "ON";
+VAL_ 2147484417 RESET_BUTTON 0 "RELEASED" 1 "PRESSED";
+VAL_ 2147484417 CALIBRATION_BUTTON 0 "RELEASED" 1 "PRESSED";
+VAL_ 2147484417 LEAKAGE_DETECTED 0 "FALSE" 1 "TRUE";
+VAL_ 2147484417 SHELL_RELAY 0 "OFF" 1 "ON";
+VAL_ 2147484418 HAZARD 0 "OFF" 1 "ON";
+VAL_ 2147484418 BEAM 0 "OFF" 1 "ON";
+VAL_ 2147484418 POSITION 0 "OFF" 1 "ON";
+VAL_ 2147484418 RIGHT_INDICATOR 0 "OFF" 1 "ON";
+VAL_ 2147484418 LEFT_INDICATOR 0 "OFF" 1 "ON";
 VAL_ 2147484672 HEADLIGHT 0 "OFF" 1 "ON";
 VAL_ 2147484672 POSITION_LIGHT 0 "OFF" 1 "ON";
 VAL_ 2147484672 BRAKE_LIGHT 0 "OFF" 1 "ON";
