@@ -1023,6 +1023,7 @@ struct candef_mcu_faults_t {
      * Offset: 0
      */
     uint8_t emergency_leakage_detected;
+    uint8_t emergency_hydrogen_leakage_voltage;
 
     /**
      * Range: 0..1 (0..1 -)
@@ -11735,6 +11736,167 @@ bool candef_edu_settings_placeholder_is_in_range(uint8_t value);
  * @return true if in range, false otherwise.
  */
 bool candef_edu_settings_placeholder_is_in_phys_range(double value);
+
+
+/* Frame ids. */
+#define CANDEF_MCU_FUEL_CELL_CURRENTS_FRAME_ID (0x10au)
+
+/* Frame lengths in bytes. */
+#define CANDEF_MCU_FUEL_CELL_CURRENTS_LENGTH (4u)
+
+/* Extended or standard frame types. */
+#define CANDEF_MCU_FUEL_CELL_CURRENTS_IS_EXTENDED (1)
+
+/* Frame cycle times in milliseconds. */
+
+
+/* Signal choices. */
+
+
+/* Frame Names. */
+#define CANDEF_MCU_FUEL_CELL_CURRENTS_NAME "MCU_FUEL_CELL_CURRENTS"
+
+/* Signal Names. */
+#define CANDEF_MCU_FUEL_CELL_CURRENTS_FUEL_CELL_STACK_OUTPUT_CURRENT_NAME "FUEL_CELL_STACK_OUTPUT_CURRENT"
+#define CANDEF_MCU_FUEL_CELL_CURRENTS_FUEL_CELL_OUTPUT_CURRENT_NAME "FUEL_CELL_OUTPUT_CURRENT"
+
+/**
+ * Signals in message MCU_FUEL_CELL_CURRENTS.
+ *
+ * All signal values are as on the CAN bus.
+ */
+struct candef_mcu_fuel_cell_currents_t {
+    /**
+     * Range: -32768..32767 (-327.68..327.67 A)
+     * Scale: 0.01
+     * Offset: 0
+     */
+    int16_t fuel_cell_stack_output_current;
+
+    /**
+     * Range: -32768..32767 (-327.68..327.67 A)
+     * Scale: 0.01
+     * Offset: 0
+     */
+    int16_t fuel_cell_output_current;
+};
+
+/**
+ * Pack message MCU_FUEL_CELL_CURRENTS.
+ *
+ * @param[out] dst_p Buffer to pack the message into.
+ * @param[in] src_p Data to pack.
+ * @param[in] size Size of dst_p.
+ *
+ * @return Size of packed data, or negative error code.
+ */
+int candef_mcu_fuel_cell_currents_pack(
+    uint8_t *dst_p,
+    const struct candef_mcu_fuel_cell_currents_t *src_p,
+    size_t size);
+
+/**
+ * Unpack message MCU_FUEL_CELL_CURRENTS.
+ *
+ * @param[out] dst_p Object to unpack the message into.
+ * @param[in] src_p Message to unpack.
+ * @param[in] size Size of src_p.
+ *
+ * @return zero(0) or negative error code.
+ */
+int candef_mcu_fuel_cell_currents_unpack(
+    struct candef_mcu_fuel_cell_currents_t *dst_p,
+    const uint8_t *src_p,
+    size_t size);
+
+/**
+ * Init message fields to default values from MCU_FUEL_CELL_CURRENTS.
+ *
+ * @param[in] msg_p Message to init.
+ *
+ * @return zero(0) on success or (-1) in case of nullptr argument.
+ */
+int candef_mcu_fuel_cell_currents_init(struct candef_mcu_fuel_cell_currents_t *msg_p);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+int16_t candef_mcu_fuel_cell_currents_fuel_cell_stack_output_current_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double candef_mcu_fuel_cell_currents_fuel_cell_stack_output_current_decode(int16_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool candef_mcu_fuel_cell_currents_fuel_cell_stack_output_current_is_in_range(int16_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool candef_mcu_fuel_cell_currents_fuel_cell_stack_output_current_is_in_phys_range(double value);
+
+/**
+ * Encode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to encode.
+ *
+ * @return Encoded signal.
+ */
+int16_t candef_mcu_fuel_cell_currents_fuel_cell_output_current_encode(double value);
+
+/**
+ * Decode given signal by applying scaling and offset.
+ *
+ * @param[in] value Signal to decode.
+ *
+ * @return Decoded signal.
+ */
+double candef_mcu_fuel_cell_currents_fuel_cell_output_current_decode(int16_t value);
+
+/**
+ * Check that given signal is in allowed range.
+ *
+ * @param[in] value Signal to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool candef_mcu_fuel_cell_currents_fuel_cell_output_current_is_in_range(int16_t value);
+
+/**
+ * Check that given physical value is in allowed range before encoding.
+ *
+ * Use this BEFORE calling _encode() to avoid silent integer overflow:
+ *   encode(-1.0) on a [0,100] signal wraps to 255 and passes is_in_range().
+ *   is_in_phys_range(-1.0) correctly returns false.
+ *
+ * @param[in] value Physical signal value to check.
+ *
+ * @return true if in range, false otherwise.
+ */
+bool candef_mcu_fuel_cell_currents_fuel_cell_output_current_is_in_phys_range(double value);
 
 
 #ifdef __cplusplus

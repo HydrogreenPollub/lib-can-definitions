@@ -652,6 +652,7 @@ int candef_mcu_faults_pack(
     dst_p[0] |= pack_left_shift_u8(src_p->emergency_switch, 0u, 0x01u);
     dst_p[0] |= pack_left_shift_u8(src_p->emergency_dead_mans_switch, 1u, 0x02u);
     dst_p[0] |= pack_left_shift_u8(src_p->emergency_leakage_detected, 2u, 0x04u);
+    dst_p[0] |= pack_left_shift_u8(src_p->emergency_hydrogen_leakage_voltage, 3u, 0x08u);
     dst_p[1] |= pack_left_shift_u8(src_p->error_fc_v_low, 0u, 0x01u);
     dst_p[1] |= pack_left_shift_u8(src_p->error_fc_v_high, 1u, 0x02u);
     dst_p[1] |= pack_left_shift_u8(src_p->error_fc_c_low, 2u, 0x04u);
@@ -684,6 +685,7 @@ int candef_mcu_faults_unpack(
     dst_p->emergency_switch = unpack_right_shift_u8(src_p[0], 0u, 0x01u);
     dst_p->emergency_dead_mans_switch = unpack_right_shift_u8(src_p[0], 1u, 0x02u);
     dst_p->emergency_leakage_detected = unpack_right_shift_u8(src_p[0], 2u, 0x04u);
+    dst_p->emergency_hydrogen_leakage_voltage = unpack_right_shift_u8(src_p[0], 3u, 0x08u);
     dst_p->error_fc_v_low = unpack_right_shift_u8(src_p[1], 0u, 0x01u);
     dst_p->error_fc_v_high = unpack_right_shift_u8(src_p[1], 1u, 0x02u);
     dst_p->error_fc_c_low = unpack_right_shift_u8(src_p[1], 2u, 0x04u);
@@ -4395,4 +4397,103 @@ bool candef_fccu_currents_ho_current_3_is_in_range(int16_t value)
 bool candef_fccu_currents_ho_current_3_is_in_phys_range(double value)
 {
     return ((value >= -40.0) && (value <= 40.0));
+}
+
+int candef_mcu_fuel_cell_currents_pack(
+    uint8_t *dst_p,
+    const struct candef_mcu_fuel_cell_currents_t *src_p,
+    size_t size)
+{
+    uint16_t fuel_cell_output_current;
+    uint16_t fuel_cell_stack_output_current;
+
+    if (size < 4u) {
+        return (-EINVAL);
+    }
+
+    memset(&dst_p[0], 0, 4);
+
+    fuel_cell_stack_output_current = (uint16_t)src_p->fuel_cell_stack_output_current;
+    dst_p[0] |= pack_left_shift_u16(fuel_cell_stack_output_current, 0u, 0xffu);
+    dst_p[1] |= pack_right_shift_u16(fuel_cell_stack_output_current, 8u, 0xffu);
+    fuel_cell_output_current = (uint16_t)src_p->fuel_cell_output_current;
+    dst_p[2] |= pack_left_shift_u16(fuel_cell_output_current, 0u, 0xffu);
+    dst_p[3] |= pack_right_shift_u16(fuel_cell_output_current, 8u, 0xffu);
+
+    return (4);
+}
+
+int candef_mcu_fuel_cell_currents_unpack(
+    struct candef_mcu_fuel_cell_currents_t *dst_p,
+    const uint8_t *src_p,
+    size_t size)
+{
+    uint16_t fuel_cell_output_current;
+    uint16_t fuel_cell_stack_output_current;
+
+    if (size < 4u) {
+        return (-EINVAL);
+    }
+
+    fuel_cell_stack_output_current = unpack_right_shift_u16(src_p[0], 0u, 0xffu);
+    fuel_cell_stack_output_current |= unpack_left_shift_u16(src_p[1], 8u, 0xffu);
+    dst_p->fuel_cell_stack_output_current = (int16_t)fuel_cell_stack_output_current;
+    fuel_cell_output_current = unpack_right_shift_u16(src_p[2], 0u, 0xffu);
+    fuel_cell_output_current |= unpack_left_shift_u16(src_p[3], 8u, 0xffu);
+    dst_p->fuel_cell_output_current = (int16_t)fuel_cell_output_current;
+
+    return (0);
+}
+
+int candef_mcu_fuel_cell_currents_init(struct candef_mcu_fuel_cell_currents_t *msg_p)
+{
+    if (msg_p == NULL) return -1;
+
+    memset(msg_p, 0, sizeof(struct candef_mcu_fuel_cell_currents_t));
+
+    return 0;
+}
+
+int16_t candef_mcu_fuel_cell_currents_fuel_cell_stack_output_current_encode(double value)
+{
+    return (int16_t)(value / 0.01);
+}
+
+double candef_mcu_fuel_cell_currents_fuel_cell_stack_output_current_decode(int16_t value)
+{
+    return ((double)value * 0.01);
+}
+
+bool candef_mcu_fuel_cell_currents_fuel_cell_stack_output_current_is_in_range(int16_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool candef_mcu_fuel_cell_currents_fuel_cell_stack_output_current_is_in_phys_range(double value)
+{
+    return ((value >= -327.68) && (value <= 327.67));
+}
+
+int16_t candef_mcu_fuel_cell_currents_fuel_cell_output_current_encode(double value)
+{
+    return (int16_t)(value / 0.01);
+}
+
+double candef_mcu_fuel_cell_currents_fuel_cell_output_current_decode(int16_t value)
+{
+    return ((double)value * 0.01);
+}
+
+bool candef_mcu_fuel_cell_currents_fuel_cell_output_current_is_in_range(int16_t value)
+{
+    (void)value;
+
+    return (true);
+}
+
+bool candef_mcu_fuel_cell_currents_fuel_cell_output_current_is_in_phys_range(double value)
+{
+    return ((value >= -327.68) && (value <= 327.67));
 }
