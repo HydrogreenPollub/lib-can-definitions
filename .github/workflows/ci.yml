@@ -23,12 +23,10 @@ jobs:
         run: pip install cantools
 
       - name: Generate C source from DBC
-        run: |
-          mkdir -p src
-          python3 -m cantools generate_c_source hydrogreen-can-definitions.dbc --database-name candef
+        run: python3 -m cantools generate_c_source hydrogreen-can-definitions.dbc --database-name candef
 
       - name: Commit generated C files
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: regenerate C sources from DBC"
-          file_pattern: "*.c *.h"
+          file_pattern: "candef.c candef.h"

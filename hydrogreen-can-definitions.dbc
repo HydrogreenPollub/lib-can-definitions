@@ -104,7 +104,7 @@ BO_ 2147483907 MCU_ANALOG_PEDALS: 4 MCU
    SG_ BRAKE_PEDAL_VOLTAGE : 16|16@1- (0.0001,0) [0|5] "V" Vector__XXX
 
 BO_ 2147483914 MCU_FUEL_CELL_CURRENTS: 4 MCU
-   SG_ FUEL_CELL_STACK_OUTPUT_CURRENT : 0|16@1- (0.01,0) [-327.68|327.67] "A" Vector__XXX
+   SG_ FUEL_CELL_STACK_OUTPUT_CURRENT : 0|16@1- (0.0005,0) [-16.384|16.3835] "A" Vector__XXX
    SG_ FUEL_CELL_OUTPUT_CURRENT : 16|16@1- (0.01,0) [-327.68|327.67] "A" Vector__XXX
 
 BO_ 2147483908 MCU_ANALOG_FUEL_CELL: 8 MCU
@@ -114,8 +114,8 @@ BO_ 2147483908 MCU_ANALOG_FUEL_CELL: 8 MCU
    SG_ HYDROGEN_LEAKAGE_SENSOR_VOLTAGE : 48|16@1- (0.0001,0) [0|5] "V" Vector__XXX
 
 BO_ 2147483909 MCU_ANALOG_POWERTRAIN: 8 MCU
-   SG_ SUPERCAPACITOR_VOLTAGE : 0|16@1- (0.001,0) [0|60] "V" SWU
-   SG_ SUPERCAPACITOR_CURRENT : 16|16@1- (0.01,0) [0|120] "A" Vector__XXX
+   SG_ SUPERCAPACITOR_VOLTAGE : 0|16@1+ (0.001,0) [0|60] "V" SWU
+   SG_ SUPERCAPACITOR_CURRENT : 16|16@1- (0.01,0) [-120|120] "A" Vector__XXX
    SG_ MOTOR_CONTROLLER_SUPPLY_CURRENT : 32|16@1- (0.001,0) [0|60] "A" Vector__XXX
    SG_ MOTOR_CONTROLLER_SUPPLY_VOLTAGE : 48|16@1- (0.001,0) [0|60] "V" Vector__XXX
 
@@ -276,6 +276,9 @@ BO_ 2147484933 FCCU_CURRENTS: 8 FCCU
    SG_ HO_CURRENT_2 : 32|16@1- (0.01,0) [-40|40] "A" Vector__XXX
    SG_ HO_CURRENT_3 : 48|16@1- (0.01,0) [-40|40] "A" Vector__XXX
 
+BO_ 2147484934 FCCU_HYDROGEN_TOTAL: 4 FCCU
+   SG_ H2_TOTAL_VOLUME : 0|32@1+ (0.01,0) [0|42949672.95] "Ln" Vector__XXX
+
 BO_ 2147484944 FCCU_SYSTEM_ENABLE: 1 Vector__XXX
    SG_ CMD_SYSTEM_ENABLE : 0|1@1+ (1,0) [0|1] "" FCCU
 
@@ -285,15 +288,19 @@ BO_ 2147484945 FCCU_MAIN_VALVE_COMMAND: 1 Vector__XXX
 BO_ 2147484946 FCCU_MANUAL_PURGE: 1 Vector__XXX
    SG_ CMD_MANUAL_PURGE : 0|1@1+ (1,0) [0|1] "" FCCU
 
-BO_ 2147484947 FCCU_FAN: 1 Vector__XXX
+BO_ 2147484947 FCCU_FAN: 2 Vector__XXX
    SG_ CMD_FAN_ON : 0|1@1+ (1,0) [0|1] "" FCCU
+   SG_ CMD_FAN_DUTY : 8|8@1+ (1,0) [0|100] "%" FCCU
 
-BO_ 2147484960 FCCU_SETTINGS: 8 Vector__XXX
+BO_ 2147484960 FCCU_FAN_SETTINGS: 8 Vector__XXX
    SG_ FAN_MODE : 0|2@1+ (1,0) [0|3] "" FCCU
-   SG_ PURGE_INTERVAL_S : 2|14@1+ (1,0) [0|16383] "s" FCCU
    SG_ P_GAIN : 16|16@1+ (1,0) [0|1000] "" FCCU
    SG_ I_GAIN : 32|16@1+ (1,0) [0|1000] "" FCCU
    SG_ D_GAIN : 48|16@1+ (1,0) [0|1000] "" FCCU
+
+BO_ 2147484961 FCCU_VALVE_SETTINGS: 4 Vector__XXX
+   SG_ PURGE_INTERVAL_S : 0|16@1- (1,0) [-1|16383] "s" FCCU
+   SG_ PURGE_DURATION_MS : 16|16@1+ (1,0) [10|500] "ms" FCCU
 
 BO_ 2147485184 TCU_STATUS: 1 TCU
    SG_ STATUS : 0|4@1+ (1,0) [0|4] "" Vector__XXX
@@ -338,7 +345,7 @@ CM_ SG_ 2147483921 FIRMWARE_MINOR "Firmware minor version.";
 CM_ SG_ 2147483921 FIRMWARE_PATCH "Firmware patch version.";
 CM_ SG_ 2147483921 BUILD_ID "Build identifier (e.g. truncated git hash).";
 CM_ BO_ 2147483936 "MCU settings (received). TCU settings (received). Currently only has a PLACEHOLDER signal. Replace with real signals.";
-CM_ SG_ 2147483906 SPEED_SENSOR_PULSE_RAW "Raw speed sensor pulse input (currently expected false in SCADE input mapping).";
+CM_ SG_ 2147483906 SPEED_SENSOR_PULSE_RAW "On Hydros, 1 means the accelerator switch on DIN3 is pressed.";
 CM_ BO_ 2147483913 "MCU SCADE acceleration and recuperation output voltages.";
 CM_ SG_ 2147483913 ACCELERATION_OUTPUT_VOLTAGE "SCADE acceleration output voltage.";
 CM_ SG_ 2147483913 BRAKE_OUTPUT_VOLTAGE "SCADE recuperation/brake output voltage.";
@@ -396,11 +403,14 @@ CM_ BO_ 2147484930 "Hydrogen flow, pressures, and leakage.";
 CM_ BO_ 2147484931 "Fuel cell voltage, current, and DCDC (accessory) voltage/current.";
 CM_ BO_ 2147484932 "Fuel cell and ambient environmental readings.";
 CM_ BO_ 2147484933 "Load current and HO-10P current sensor channels.";
+CM_ BO_ 2147484934 "Total hydrogen volume consumed since power-on.";
+CM_ SG_ 2147484934 H2_TOTAL_VOLUME "Cumulative hydrogen consumption since power-on, resets to 0 on reboot.";
 CM_ BO_ 2147484944 "Command to enable or disable the FCCU system.";
 CM_ BO_ 2147484945 "Command to open or close the main valve.";
 CM_ BO_ 2147484946 "Command to manually trigger the purge valve.";
-CM_ BO_ 2147484947 "Command to turn the fan on or off.";
-CM_ BO_ 2147484960 "FCCU settings (received) for Fan mode, Purge interval, and PID gains.";
+CM_ BO_ 2147484947 "Command to turn the fan on or off and set its duty cycle.";
+CM_ BO_ 2147484960 "FCCU fan mode and PID gains.";
+CM_ BO_ 2147484961 "FCCU purge interval and duration.";
 CM_ BO_ 2147485184 "TCU node status. Currently a mirror of CCU_STATUS.";
 CM_ SG_ 2147485184 STATUS "Node status. 0=INIT, 1=OPERATIONAL, 2=WARNING, 3=BUS_OFF, 4=DFU.";
 CM_ BO_ 2147485185 "TCU firmware version.";
@@ -486,11 +496,13 @@ VAL_ 2147484674 VEHICLE_TYPE 0 "HYDROS_V1" 1 "HYDROS_V2" 2 "BOLID" 3 "HYDRA";
 VAL_ 2147484674 INSTANCE 0 "FRONT" 1 "BACK";
 VAL_ 2147484928 STATE 0 "INIT" 1 "STARTING" 2 "RUNNING" 3 "STOPPED";
 VAL_ 2147484928 MAIN_VALVE 0 "CLOSED" 1 "OPEN";
-VAL_ 2147484928 PURGE_VALVE 0 "CLOSED" 1 "OPEN";
+VAL_ 2147484928 PURGE_VALVE 0 "CLOSED" 1 "PURGING";
 VAL_ 2147484928 FAN_STATE 0 "OFF" 1 "ON";
 VAL_ 2147484929 VEHICLE_TYPE 0 "HYDROS_V1" 1 "HYDROS_V2" 2 "BOLID" 3 "HYDRA";
 VAL_ 2147484929 FUELCELL_TYPE 0 "PROTIUM" 1 "NEW_CELL";
 VAL_ 2147484960 FAN_MODE 0 "MANUAL" 1 "LINEAR_TEMP" 2 "PID";
+VAL_ 2147484945 CMD_MAIN_VALVE 0 "CLOSE" 1 "OPEN";
+VAL_ 2147484946 CMD_MANUAL_PURGE 0 "IDLE" 1 "TRIGGER_PURGE";
 VAL_ 2147485184 STATUS 0 "INIT" 1 "OPERATIONAL" 2 "WARNING" 3 "BUS_OFF" 4 "DFU";
 VAL_ 2147485185 VEHICLE_TYPE 0 "HYDROS_V1" 1 "HYDROS_V2" 2 "BOLID" 3 "HYDRA";
 VAL_ 2147485440 STATUS 0 "INIT" 1 "OPERATIONAL" 2 "WARNING" 3 "BUS_OFF" 4 "DFU";
